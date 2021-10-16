@@ -6,6 +6,7 @@ SET(TEST_EXECUTABLES
         test-trig
         test-trig-loop
         test-x
+	test-+
 )
 
 foreach(test ${TEST_EXECUTABLES})
