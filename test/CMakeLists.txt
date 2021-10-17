@@ -10,6 +10,7 @@ SET(TEST_EXECUTABLES
 	test-+
 	test-rnd10000
 	test-rnd10000-line
+	test-rnd10000-bar
 )
 
 foreach(test ${TEST_EXECUTABLES})
