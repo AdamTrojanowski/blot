@@ -7,6 +7,8 @@ SET(TEST_EXECUTABLES
         test-trig-loop
         test-x
 	test-+
+	test-rnd10000
+	test-rnd10000-line
 )
 
 foreach(test ${TEST_EXECUTABLES})
