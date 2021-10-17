@@ -19,6 +19,8 @@ typedef struct blot_figure {
 	bool y_limits_set;
 	blot_xy_limits lim;
 
+	blot_strv xlabels;
+
 	/* layers */
 	gsize layer_count;
 	struct blot_layer **layers;
@@ -42,6 +44,9 @@ extern bool blot_figure_set_x_limits(blot_figure *fig,
 				     double x_min, double x_max, GError **);
 extern bool blot_figure_set_y_limits(blot_figure *fig,
 				     double y_min, double y_max, GError **);
+
+extern bool blot_figure_set_x_axis_labels(blot_figure *fig, size_t label_count,
+					  char **x_labels, GError **);
 
 /* add layers */
 
@@ -67,6 +72,16 @@ static inline bool blot_figure_line(blot_figure *fig, blot_data_type data_type,
 				GError **error)
 {
 	return blot_figure_plot(fig, BLOT_LINE, data_type,
+				data_count, data_xs, data_ys,
+				data_color, data_label, error);
+}
+
+static inline bool blot_figure_bar(blot_figure *fig, blot_data_type data_type,
+				   size_t data_count, const void *data_xs, const void *data_ys,
+				   blot_color data_color, const char *data_label,
+				   GError **error)
+{
+	return blot_figure_plot(fig, BLOT_BAR, data_type,
 				data_count, data_xs, data_ys,
 				data_color, data_label, error);
 }

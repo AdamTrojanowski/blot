@@ -10,6 +10,11 @@ static double sin_ys[DATA_COUNT];
 static double cos_ys[DATA_COUNT];
 static double tan_ys[DATA_COUNT];
 
+#define X_MIN -7
+#define X_MAX 7
+#define Y_MIN -2
+#define Y_MAX 2
+
 blot_color data_color = 9;
 
 #define FATAL_ERROR(error) ({ \
@@ -59,17 +64,17 @@ int main(void)
 	blot_figure_set_screen_size(fig, 80, 40, &error);
 	FATAL_ERROR(error);
 
-	blot_figure_set_x_limits(fig, -7, 7, &error);
+	blot_figure_set_x_limits(fig, X_MIN, X_MAX, &error);
 	FATAL_ERROR(error);
-	blot_figure_set_y_limits(fig, -2, 2, &error);
+	blot_figure_set_y_limits(fig, Y_MIN, Y_MAX, &error);
 	FATAL_ERROR(error);
 
-#if 1
+#if 0
 	/* hack for now to add origin lines */
 
 	/* plot X-axis origin */
 
-	gint32 xax[2] = { -7, 7 };
+	gint32 xax[2] = { X_MIN, X_MAX };
 	gint32 xay[2] = { 0, 0 };
 
 	blot_figure_line(fig, BLOT_DATA_INT32,
@@ -80,12 +85,66 @@ int main(void)
 	/* plot Y-axis origin */
 
 	gint32 yax[2] = { 0, 0 };
-	gint32 yay[2] = { -2, 2 };
+	gint32 yay[2] = { Y_MIN, Y_MAX };
 
 	blot_figure_line(fig, BLOT_DATA_INT32,
 			 2, yax, yay,
 			 8, NULL, &error);
 	FATAL_ERROR(error);
+#endif
+
+#if 1
+	/* hack for now to add origin lines */
+
+	/* plot X-axis origin */
+
+	gint32 xax[5][2];
+	gint32 xay[5][2];
+
+	for (int i=Y_MIN; i<=Y_MAX; i++) {
+		xax[Y_MAX+i][0] = X_MIN;
+		xax[Y_MAX+i][1] = X_MAX;
+		xay[Y_MAX+i][0] = i;
+		xay[Y_MAX+i][1] = i;
+
+		blot_figure_line(fig, BLOT_DATA_INT32,
+				 2, xax[Y_MAX+i], xay[Y_MAX+i],
+				 i==0 ? 15 : 8, NULL, &error);
+		FATAL_ERROR(error);
+	}
+
+	/* plot Y-axis origin */
+
+	gint32 yax[15][2];
+	gint32 yay[15][2];
+
+	for (int i=X_MIN; i<=X_MAX; i++) {
+		yax[X_MAX+i][0] = i;
+		yax[X_MAX+i][1] = i;
+		yay[X_MAX+i][0] = Y_MIN;
+		yay[X_MAX+i][1] = Y_MAX;
+
+		blot_figure_line(fig, BLOT_DATA_INT32,
+				 2, yax[X_MAX+i], yay[X_MAX+i],
+				 i==0 ? 15 : 8, NULL, &error);
+		FATAL_ERROR(error);
+	}
+	/* plot Y-axis origin */
+
+	double ypx[15][2];
+	gint32 ypy[15][2];
+
+	for (int i=Y_MIN; i<=Y_MAX; i++) {
+		ypx[Y_MAX+i][0] = i * M_PI;
+		ypx[Y_MAX+i][1] = i * M_PI;
+		ypy[Y_MAX+i][0] = Y_MIN;
+		ypy[Y_MAX+i][1] = Y_MAX;
+
+		blot_figure_line(fig, BLOT_DATA_(DOUBLE,INT32),
+				 2, ypx[Y_MAX+i], ypy[Y_MAX+i],
+				 15, NULL, &error);
+		FATAL_ERROR(error);
+	}
 #endif
 
 	/* add a scatter plot */
