@@ -39,6 +39,8 @@ install: build
 test: build
 	ninja -C ${BUILDDIR} test
 
+check: build
+	./test/run-tests.sh
 # ---------------------------------------------------------------------------
 
 .PHONY: tags cscope cscope.files
